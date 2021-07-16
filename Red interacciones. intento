@@ -1,0 +1,215 @@
+---
+title: "red de interacción verano región"
+author: "Francisco Alfonso Perez Storms"
+date: "2/7/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Descargar la base de datos
+```{r}
+ Encuesta_verano_region <- read_excel("C:/Users/gbsto/Downloads/Encuesta_a_Estudiantes_acerca_del_impacto_del_curso_en_línea1_1875.xlsx")
+```
+
+```{r}
+#View(Encuesta_verano_region)
+```
+
+Eliminamos las columnas que no nos son de utilidad. 
+```{r}
+verano_region <- Encuesta_verano_region[c(-2,-3,-4,-5)] 
+```
+
+```{r}
+#View(verano_region)
+```
+
+Separamos la primera parte que se enfoca de manera principal a la materia de matematicas
+```{r}
+verano_region_mate <- verano_region[c(-(18:26))]
+View (verano_region_mate)
+```
+
+```{r}
+library(igraph)
+```
+
+No me da, porque necesito que sean valores numericos
+```{r}
+row.names(verano_region_mate) <- verano_region_mate[ ,1]
+matriz <- verano_region_mate[ ,-1]
+matriz<-as.factor(matriz)
+matriz <- as.matrix(matriz)
+
+View (matriz)
+
+heatmap(matriz)
+
+red <- graph_from_adjacency_matrix(matriz, mode = 'directed')
+plot(red)
+```
+
+
+```{r}
+id <- c(1:1875)
+
+pro_edu <- factor(verano_region_mate$`¿En cuál programa educativo estás inscrito?`)
+pro_edu_n <- as.numeric(pro_edu)
+
+mater_mate <- factor(verano_region_mate$`¿Cuál(es) materia(s) de matemáticas estás cursando actualmente?`)
+mater_mate_n <- as.numeric (mater_mate)
+
+verano_region_mate_factor <- cbind(id,pro_edu_n, mater_mate_n)
+View(verano_region_mate_factor)
+
+row.names(verano_region_mate_factor) <- verano_region_mate_factor[ ,1]
+matriz <- verano_region_mate_factor[ ,-1]
+View(matriz)
+matriz <- as.matrix(matriz)
+
+View (matriz)
+
+heatmap(matriz)
+
+red <- graph_from_adjacency_matrix(matriz, mode = 'directed')
+plot(red)
+```
+
+```{r}
+library("Hmisc")
+
+tmatriz <-t(matriz)
+
+crr <- cor(matriz)
+crr
+
+library("pheatmap"
+ctr <- cor(tmatriz)
+ctr
+
+```
+
+Establecemos un punto de corte 
+Creamos una matriz de ceros y unos
+```{r}
+diag(crr) <- rep(0, length(crr[1, ]))
+
+crr[crr < .75] <- 0
+crr[crr > .7499] <- 1
+
+View(crr)
+
+library("igraph")
+
+red <- graph_from_adjacency_matrix(crr, mode = 'undirected')
+plot(red)
+
+```
+
+
+
+```{r}
+pro_edu <- factor(verano_region_mate$`¿En cuál programa educativo estás inscrito?`)
+table(pro_edu)
+pro_edu_tb <- table(pro_edu)
+```
+
+
+```{r}
+pro_edu_n <- as.numeric(pro_edu)
+View (pro_edu_n)
+```
+
+for(i = 1) {
+
+}
+
+```{r}
+pro_edu_ISTI <- pro_edu_n 
+View(pro_edu_ISTI)
+pro_edu_ISTI_1 <- 
+for (i in (1:length(pro_edu_ISTI)))
+  if (i == "1"){
+  "1"
+} else {
+  "0"
+}
+
+length(pro_edu_ISTI)
+
+View(pro_edu_ISTI_1)
+
+N <- sum(datos[ , 2])
+n <- 1
+D <- c()
+    
+for (n in 1:length(datos[ , 2])) {
+  densidad <- datos [ , 2]
+  aux <- datos$densidad[n]/N
+  d <- aux*aux
+  D[n] <- d
+  n <- n + 1
+}
+
+n <-  1
+pro_edu_ISTI_1 <- c()
+for(n in 1:length(pro_edu_ISTI)){
+m <- if (n == "1"){
+  "1"
+} else {
+  "0"
+}
+
+pro_edu_ISTI_1[n] <- m
+n <- n+1
+}
+```
+
+```{r}
+id <- c(1:1875)
+pro_edu_ISTI <- cbind(id,pro_edu_n)
+pro_edu_ISTI
+
+prued <- function(data){
+n <-  1
+pro_edu_ISTI_1 <- c()
+for(n in 1:length(data[,2])){
+valor <- data[,2]
+m <- if (data$valor[n] == "1"){
+  "1"
+} else {
+  "0"
+}
+
+pro_edu_ISTI_1[n] <- m
+n <- n+1
+}
+print(View(pro_edu_ISTI_1))
+}
+prued(pro_edu_ISTI)
+
+```
+
+```{r}
+write.table(pro_edu_ISTI, file = "pro_edu_ISTI.xls", row.names = F)
+View(pro_edu_ISTI)
+
+n <-  1
+pro_edu_ISTI_1 <- c()
+for(n in 1:length(pro_edu_ISTI[,2])){
+valor <- pro_edu_ISTI[,2]
+m <- if (pro_edu_ISTI$valor[n] == "1"){
+  "1"
+} else {
+  "0"
+}
+
+pro_edu_ISTI_1[n] <- m
+n <- n+1
+}
+print(View(pro_edu_ISTI_1))
+```
