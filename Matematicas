@@ -1,0 +1,681 @@
+---
+title: "verano de la región"
+author: "Francisco Alfonso Perez Storms"
+date: "21/6/2021"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Cargar librerias
+```{r}
+library(ggplot2)
+library(readxl)
+```
+
+
+Descargar la base de datos
+```{r}
+ Encuesta_verano_region <- read_excel("C:/Users/gbsto/Downloads/Encuesta_a_Estudiantes_acerca_del_impacto_del_curso_en_línea1_1875.xlsx")
+```
+
+```{r}
+#View(Encuesta_verano_region)
+```
+
+Eliminamos las columnas que no nos son de utilidad. 
+```{r}
+verano_region <- Encuesta_verano_region[c(-2,-3,-4,-5)] 
+```
+
+```{r}
+#View(verano_region)
+```
+
+Cantidad de estudiantes
+```{r}
+length(verano_region$ID)
+```
+
+
+Revisamos la cantidad de Na´s por variable
+```{r}
+sapply ( verano_region, function(x) sum(is.na(x)))
+```
+
+Separamos la primera parte que se enfoca de manera principal a la materia de matematicas
+```{r}
+verano_region_mate <- verano_region[c(-(18:26))]
+
+```
+
+hacemos que se forme la base de datos en formato de data.frame, revisamos la clase del objeto y abrimos el mismo.
+```{r}
+as.data.frame(verano_region_mate)
+class(verano_region_mate)
+#View(verano_region_mate)
+```
+
+obtener algunos datos basicos de la base de datos de los estudiantes que toman matematicas
+```{r}
+print("Qué tipo de base de datos es")
+class(verano_region_mate)
+print("Qué longitud tiene")
+length(verano_region_mate)
+print("Estructura de la base de datos")
+str(verano_region_mate)
+print("Nombres")
+names(verano_region_mate)
+print("Dimensiones")
+dim(verano_region_mate)
+```
+
+
+Separamos la segunda parte enfocada a los que a parte sí tomaron una materia de fisica
+```{r}
+verano_region_fisica <- (verano_region[c(-(2:17))])
+```
+
+Pasamos a valores booleanos la pregunta de si toma física y retiramos a todas las muestras que tengan no
+```{r}
+verano_region_fisica_1 <- verano_region_fisica[ which(verano_region_fisica$`Llevas algún curso de física`=='Si'), ]
+verano_region_fisica_1 <- (verano_region_fisica_1[-(2)])
+#View(verano_region_fisica_1)
+```
+
+hacemos que se forme la base de datos en formato de data.frame, revisamos la clase del objeto y abrimos el mismo.
+```{r}
+as.data.frame(verano_region_fisica_1)
+class(verano_region_fisica_1)
+#View(verano_region_fisica_1)
+```
+
+obtener algunos datos basicos de la base de datos de los estudiantes que toman matematicas y fisica 
+```{r}
+print("Qué tipo de base de datos es")
+class(verano_region_fisica_1)
+print("Qué longitud tiene")
+length(verano_region_fisica_1)
+print("Estructura de la base de datos")
+str(verano_region_fisica_1)
+print("Nombres")
+names(verano_region_fisica_1)
+print("Dimensiones")
+dim(verano_region_fisica_1)
+```
+
+¿En cuál programa educativo estás inscrito?
+```{r}
+pro_edu <- factor(verano_region_mate$`¿En cuál programa educativo estás inscrito?`)
+table(pro_edu)
+pro_edu_tb <- table(pro_edu)
+
+Fre_abs_1 <- barplot(pro_edu_tb, col = rainbow(6), ylim = c(0,1000),  main = "Programa educativo inscrito", xlab = "Programa", ylab = "Frecuencia Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+text(Fre_abs_1, pro_edu_tb +0.1, labels = pro_edu_tb)
+
+Fre_rel_1 <- barplot(prop.table(pro_edu_tb)*100, col = rainbow(6), ylim = c(0,60),  main = "Programa educativo inscrito", xlab = "Programa", ylab = "Porcentaje Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+
+print("Funciones estadísticas")
+print("mediana")
+median(pro_edu_tb)
+print("desviación estandar")
+sd (pro_edu_tb)
+print("varianza")
+var (pro_edu_tb)
+print("desviación absoluta media")
+mad (pro_edu_tb)
+print("promedio")
+mean(pro_edu_tb) 
+print("rango")
+range(pro_edu_tb)
+print("summary")
+summary(pro_edu_tb)
+```
+
+¿Cuál(es) materia(s) de matemáticas estás cursando actualmente?
+```{r}
+mater_mate <- factor(verano_region_mate$`¿Cuál(es) materia(s) de matemáticas estás cursando actualmente?`)
+mater_mate_tb <- table(mater_mate)
+#View(mater_mate_tb)
+
+Fre_abs_2 <- barplot(mater_mate_tb, col = rainbow(6), ylim = c(0,700),  main = "Materia de matematicas", xlab = "Materias", ylab = "Frecuencia Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+text(Fre_abs_1, mater_mate_tb +0.1, labels = mater_mate_tb)
+
+Fre_rel_2 <- barplot(prop.table(mater_mate_tb)*100, col = rainbow(6), ylim = c(0,35),  main = "Materia de matematicas", xlab = "Materias", ylab = "Porcentaje Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+
+print("Funciones estadísticas")
+print("mediana")
+median(mater_mate_tb)
+print("desviación estandar")
+sd (mater_mate_tb)
+print("varianza")
+var (mater_mate_tb)
+print("desviación absoluta media")
+mad (mater_mate_tb)
+print("promedio")
+mean(mater_mate_tb) 
+print("rango")
+range(mater_mate_tb)
+print("summary")
+summary(mater_mate_tb)
+```
+
+
+Para tus estudios en línea cuentas en casa con (PUEDES SELECCIONAR MAS DE UNA RESPUESTA)
+```{r}
+tec_equip <- factor(verano_region_mate$`Para tus estudios en línea cuentas en casa con (PUEDES SELECCIONAR MAS DE UNA RESPUESTA)`)
+tec_equip_tb <- table(tec_equip)
+#View(tec_equip_tb)
+
+Fre_abs_3 <- barplot(tec_equip_tb, col = rainbow(6), ylim = c(0,300),  main = "Equipo en línea", xlab = "Equipo", ylab = "Frecuencia Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+text(Fre_abs_1, tec_equip_tb +0.1, labels = tec_equip_tb)
+
+Fre_rel_3 <- barplot(prop.table(tec_equip_tb)*100, col = rainbow(6), ylim = c(0,20),  main = "Equipo en línea", xlab = "Equipo", ylab = "Porcentaje Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+
+print("Funciones estadísticas")
+print("mediana")
+median(tec_equip_tb)
+print("desviación estandar")
+sd (tec_equip_tb)
+print("varianza")
+var (tec_equip_tb)
+print("desviación absoluta media")
+mad (tec_equip_tb)
+print("promedio")
+mean(tec_equip_tb) 
+print("rango")
+range(tec_equip_tb)
+print("summary")
+summary(tec_equip_tb)
+```
+
+¿Has trabajado durante este semestre?
+```{r}
+tra_clase <- factor(verano_region_mate$`¿Has trabajado durante este semestre?`)
+tra_clase_tb <- table(tra_clase)
+#View(tra_clase_tb)
+
+Fre_abs_4 <- barplot(tra_clase_tb, col = rainbow(6), ylim = c(0,800),  main = "Trabajo y estudio", xlab = "Opciones", ylab = "Frecuencia Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+text(Fre_abs_1, tra_clase_tb +0.1, labels = tra_clase_tb)
+
+Fre_rel_4 <- barplot(prop.table(tra_clase_tb)*100, col = rainbow(6), ylim = c(0,50),  main = "Trabajo y estudio", xlab = "Opciones", ylab = "Porcentaje Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+
+print("Funciones estadísticas")
+print("mediana")
+median(tra_clase_tb)
+print("desviación estandar")
+sd (tra_clase_tb)
+print("varianza")
+var (tra_clase_tb)
+print("desviación absoluta media")
+mad (tra_clase_tb)
+print("promedio")
+mean(tra_clase_tb) 
+print("rango")
+range(tra_clase_tb)
+print("summary")
+summary(tra_clase_tb)
+```
+
+¿Qué beneficios has obtenido con el curso en línea? (PUEDES SELECCIONAR MAS DE UNA OPCIÓN)
+```{r}
+bene_linea <- factor(verano_region_mate$`¿Qué beneficios has obtenido con el curso en línea? (PUEDES SELECCIONAR MAS DE UNA OPCIÓN)`)
+bene_linea_tb <- table(bene_linea)
+#View(bene_linea_tb)
+
+Fre_abs_5 <- barplot(bene_linea_tb, col = rainbow(6), ylim = c(0,400),  main = "Beneficios curso en línea", xlab = "Opciones", ylab = "Frecuencia Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+text(Fre_abs_1, bene_linea_tb +0.1, labels = bene_linea_tb)
+
+Fre_rel_5 <- barplot(prop.table(bene_linea_tb)*100, col = rainbow(6), ylim = c(0,20),  main = "Beneficios curso en línea", xlab = "Opciones", ylab = "Porcentaje Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+
+print("Funciones estadísticas")
+print("mediana")
+median(bene_linea_tb)
+print("desviación estandar")
+sd (bene_linea_tb)
+print("varianza")
+var (bene_linea_tb)
+print("desviación absoluta media")
+mad (bene_linea_tb)
+print("promedio")
+mean(bene_linea_tb) 
+print("rango")
+range(bene_linea_tb)
+print("summary")
+summary(bene_linea_tb)
+```
+
+Se me hace mas fácil entender los conceptos de Matemáticas en el clase en el aula que en el curso en línea
+```{r}
+facil_aula <- factor(verano_region_mate$`Se me hace mas fácil entender los conceptos de Matemáticas en el clase en el aula que en el curso en línea`)
+facil_aula_tb <- table(facil_aula)
+#View(facil_aula_tb)
+
+Fre_abs_6 <- barplot(facil_aula_tb, col = rainbow(6), ylim = c(0,800),  main = "Aula vs línea", xlab = "Opciones", ylab = "Frecuencia Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+text(Fre_abs_1, facil_aula_tb +0.1, labels = facil_aula_tb)
+
+Fre_rel_6 <- barplot(prop.table(facil_aula_tb)*100, col = rainbow(6), ylim = c(0,50),  main = "Aula vs línea", xlab = "Opciones", ylab = "Porcentaje Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+
+print("Funciones estadísticas")
+print("mediana")
+median(facil_aula_tb)
+print("desviación estandar")
+sd (facil_aula_tb)
+print("varianza")
+var (facil_aula_tb)
+print("desviación absoluta media")
+mad (facil_aula_tb)
+print("promedio")
+mean(facil_aula_tb) 
+print("rango")
+range(facil_aula_tb)
+print("summary")
+summary(facil_aula_tb)
+```
+
+¿Cuáles son las limitantes que veo del aprendizaje modalidad en línea?(PUEDES SELECCIONAR MAS DE UNA OPCION)
+```{r}
+limi_apre_linea <- factor(verano_region_mate$`¿Cuáles son las limitantes que veo del aprendizaje modalidad en línea?(PUEDES SELECCIONAR MAS DE UNA OPCION)`)
+limi_apre_linea_tb <- table(limi_apre_linea)
+#View(limi_apre_linea_tb)
+
+Fre_abs_7 <- barplot(limi_apre_linea_tb, col = rainbow(6), ylim = c(0,300),  main = "Limitantes en línea", xlab = "limitantes", ylab = "Frecuencia Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+text(Fre_abs_1, limi_apre_linea_tb +0.1, labels = limi_apre_linea_tb)
+
+Fre_rel_7 <- barplot(prop.table(limi_apre_linea_tb)*100, col = rainbow(6), ylim = c(0,20),  main = "Limitantes en línea", xlab = "limitantes", ylab = "Porcentaje Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+
+print("Funciones estadísticas")
+print("mediana")
+median(limi_apre_linea_tb)
+print("desviación estandar")
+sd (limi_apre_linea_tb)
+print("varianza")
+var (limi_apre_linea_tb)
+print("desviación absoluta media")
+mad (limi_apre_linea_tb)
+print("promedio")
+mean(limi_apre_linea_tb) 
+print("rango")
+range(limi_apre_linea_tb)
+print("summary")
+summary(limi_apre_linea_tb)
+```
+
+Para las sesiones en línea síncronas, que tan común pasa que no tengas conexión a Internet
+```{r}
+falla_inter <- factor(verano_region_mate$`Para las sesiones en línea síncronas, que tan común pasa que no tengas conexión a Internet`)
+falla_inter_tb <- table(falla_inter)
+#View(falla_inter_tb)
+
+Fre_abs_8 <- barplot(falla_inter_tb, col = rainbow(6), ylim = c(0,1100),  main = "Problema de conexión", xlab = "Falla internet", ylab = "Frecuencia Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+text(Fre_abs_1, falla_inter_tb +0.1, labels = falla_inter_tb)
+
+Fre_rel_8 <- barplot(prop.table(falla_inter_tb)*100, col = rainbow(6), ylim = c(0,60),  main = "Problema de conexión", xlab = "Falla internet", ylab = "Porcentaje Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+
+print("Funciones estadísticas")
+print("mediana")
+median(falla_inter_tb)
+print("desviación estandar")
+sd (falla_inter_tb)
+print("varianza")
+var (falla_inter_tb)
+print("desviación absoluta media")
+mad (falla_inter_tb)
+print("promedio")
+mean(falla_inter_tb) 
+print("rango")
+range(falla_inter_tb)
+print("summary")
+summary(falla_inter_tb)
+```
+
+¿Cuál(es) de las siguientes formas son las que más te gustan para el aprendizaje en línea?(PUEDES MARCAR MAS DE UNA OPCIÓN)
+```{r}
+apren_linea <- factor(verano_region_mate$`¿Cuál(es) de las siguientes formas son las que más te gustan para el aprendizaje en línea?(PUEDES MARCAR MAS DE UNA OPCIÓN)`)
+apren_linea_tb <- table(apren_linea)
+#View(apren_linea_tb)
+
+Fre_abs_9 <- barplot(apren_linea_tb, col = rainbow(6), ylim = c(0,600),  main = "Aprendisaje en línea", xlab = "Gustos", ylab = "Frecuencia Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+text(Fre_abs_1, apren_linea_tb +0.1, labels = apren_linea_tb)
+
+Fre_rel_9 <- barplot(prop.table(apren_linea_tb)*100, col = rainbow(6), ylim = c(0,40),  main = "Aprendisaje en línea", xlab = "Gustos", ylab = "Porcentaje Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+
+print("Funciones estadísticas")
+print("mediana")
+median(apren_linea_tb)
+print("desviación estandar")
+sd (apren_linea_tb)
+print("varianza")
+var (apren_linea_tb)
+print("desviación absoluta media")
+mad (apren_linea_tb)
+print("promedio")
+mean(apren_linea_tb) 
+print("rango")
+range(apren_linea_tb)
+print("summary")
+summary(apren_linea_tb)
+```
+
+¿Has sentido que se te ha incrementado el estrés debido a la contingencia?
+```{r}
+estres <- factor(verano_region_mate$`¿Has sentido que se te ha incrementado el estrés debido a la contingencia?`)
+estres_tb <- table(estres)
+#View(estres_tb)
+
+Fre_abs_10 <- barplot(estres_tb, col = rainbow(6), ylim = c(0,1700),  main = "Estres por la contigencia", xlab = "Opción", ylab = "Frecuencia Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+text(Fre_abs_1, estres_tb +0.1, labels = estres_tb)
+
+Fre_rel_10 <- barplot(prop.table(estres_tb)*100, col = rainbow(6), ylim = c(0,100),  main = "Estres por la contigencia", xlab = "Opción", ylab = "Porcentaje Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+
+print("Funciones estadísticas")
+print("mediana")
+median(estres_tb)
+print("desviación estandar")
+sd (estres_tb)
+print("varianza")
+var (estres_tb)
+print("desviación absoluta media")
+mad (estres_tb)
+print("promedio")
+mean(estres_tb) 
+print("rango")
+range(estres_tb)
+print("summary")
+summary(estres_tb)
+```
+
+Para los que han sentido estrés ¿Cuál de los siguientes síntomas has experimentado? (PUEDES PONER MAS DE UNA OPCIÓN)
+```{r}
+estres_sint <- factor(verano_region_mate$`Para los que han sentido estrés ¿Cuál de los siguientes síntomas has experimentado? (PUEDES PONER MAS DE UNA OPCIÓN)`)
+estres_sint_tb <- table(estres_sint)
+#View(estres_sint_tb)
+
+Fre_abs_11 <- barplot(estres_sint_tb, col = rainbow(6), ylim = c(0,200),  main = "Sintomas de estres", xlab = "Sintomas", ylab = "Frecuencia Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+text(Fre_abs_1, estres_sint_tb +0.1, labels = estres_sint_tb)
+
+Fre_rel_11 <- barplot(prop.table(estres_sint_tb)*100, col = rainbow(6), ylim = c(0,10),  main = "Sintomas de estres", xlab = "Sintomas", ylab = "Porcentaje Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+
+print("Funciones estadísticas")
+print("mediana")
+median(estres_sint_tb)
+print("desviación estandar")
+sd (estres_sint_tb)
+print("varianza")
+var (estres_sint_tb)
+print("desviación absoluta media")
+mad (estres_sint_tb)
+print("promedio")
+mean(estres_sint_tb) 
+print("rango")
+range(estres_sint_tb)
+print("summary")
+summary(estres_sint_tb)
+```
+
+¿Crees que los profesores han implementado bien la enseñanza en línea en matemáticas con las prácticas educativas que han realizado?
+```{r}
+profe_mate <- factor(verano_region_mate$`¿Crees que los profesores han implementado bien la enseñanza en línea en matemáticas con las prácticas educativas que han realizado?`)
+profe_mate_tb <- table(profe_mate)
+#View(profe_mate_tb)
+
+Fre_abs_12 <- barplot(profe_mate_tb, col = rainbow(6), ylim = c(0,900),  main = "Enseñanza de los profes de mate", xlab = "Opción", ylab = "Frecuencia Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+text(Fre_abs_1, profe_mate_tb +0.1, labels = profe_mate_tb)
+
+Fre_rel_12 <- barplot(prop.table(profe_mate_tb)*100, col = rainbow(6), ylim = c(0,50),  main = "Enseñanza de los profes de mate", xlab = "Opción", ylab = "Porcentaje Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+
+print("Funciones estadísticas")
+print("mediana")
+median(profe_mate_tb)
+print("desviación estandar")
+sd (profe_mate_tb)
+print("varianza")
+var (profe_mate_tb)
+print("desviación absoluta media")
+mad (profe_mate_tb)
+print("promedio")
+mean(profe_mate_tb) 
+print("rango")
+range(profe_mate_tb)
+print("summary")
+summary(profe_mate_tb)
+```
+
+¿Cuál de los siguientes  materiales son los que más consultas en internet para aprender Matemáticas?(PUEDES PONER MAS DE UNA OPCIÓN)
+```{r}
+consul_mate <- factor(verano_region_mate$`¿Cuál de los siguientes  materiales son los que más consultas en internet para aprender Matemáticas?(PUEDES PONER MAS DE UNA OPCIÓN)`)
+consul_mate_tb <- table(consul_mate)
+#View(consul_mate_tb)
+
+Fre_abs_13 <- barplot(consul_mate_tb, col = rainbow(6), ylim = c(0,300),  main = "Materiales en linea para mate", xlab = "Material", ylab = "Frecuencia Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+text(Fre_abs_1, consul_mate_tb +0.1, labels = consul_mate_tb)
+
+Fre_rel_13 <- barplot(prop.table(consul_mate_tb)*100, col = rainbow(6), ylim = c(0,30),  main = "Materiales en linea para mate", xlab = "Material", ylab = "Porcentaje Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+
+print("Funciones estadísticas")
+print("mediana")
+median(consul_mate_tb)
+print("desviación estandar")
+sd (consul_mate_tb)
+print("varianza")
+var (consul_mate_tb)
+print("desviación absoluta media")
+mad (consul_mate_tb)
+print("promedio")
+mean(consul_mate_tb) 
+print("rango")
+range(consul_mate_tb)
+print("summary")
+summary(consul_mate_tb)
+```
+
+Creo durante este semestre la evaluación en línea de  matemáticas ha sido la correcta (exámenes rápidos y a final del parcial,  examen final, tareas, actividades, guías)
+```{r}
+evalua_mate <- factor(verano_region_mate$`Creo durante este semestre la evaluación en línea de  matemáticas ha sido la correcta (exámenes rápidos y a final del parcial,  examen final, tareas, actividades, guías)`)
+evalua_mate_tb <- table(evalua_mate)
+#View(evalua_mate_tb)
+
+Fre_abs_14 <- barplot(evalua_mate_tb, col = rainbow(6), ylim = c(0,900),  main = "Percepción evaluación en línea", xlab = "Opciones", ylab = "Frecuencia Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+text(Fre_abs_1, evalua_mate_tb +0.1, labels = evalua_mate_tb)
+
+Fre_rel_14 <- barplot(prop.table(evalua_mate_tb)*100, col = rainbow(6), ylim = c(0,50),  main = "Percepción evaluación en línea", xlab = "Opciones", ylab = "Porcentaje Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+
+print("Funciones estadísticas")
+print("mediana")
+median(evalua_mate_tb)
+print("desviación estandar")
+sd (evalua_mate_tb)
+print("varianza")
+var (evalua_mate_tb)
+print("desviación absoluta media")
+mad (evalua_mate_tb)
+print("promedio")
+mean(evalua_mate_tb) 
+print("rango")
+range(evalua_mate_tb)
+print("summary")
+summary(evalua_mate_tb)
+```
+
+¿Te gustaría que se añadieran otras formas de evaluar en matemáticas? (en dado caso de que si) Mencionarlas porfavor
+```{r}
+otra_evaluar_mate <- factor(verano_region_mate$`¿Te gustaría que se añadieran otras formas de evaluar en matemáticas? (en dado caso de que si) Mencionarlas porfavor`)
+otra_evaluar_mate_tb <- table(otra_evaluar_mate)
+#View(otra_evaluar_mate_tb)
+
+Fre_abs_15 <- barplot(otra_evaluar_mate_tb, col = rainbow(6), ylim = c(0,100),  main = "Opciones de evaluación de mate", xlab = "Opciones", ylab = "Frecuencia Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+text(Fre_abs_1, otra_evaluar_mate_tb +0.1, labels = otra_evaluar_mate_tb)
+
+Fre_rel_15 <- barplot(prop.table(otra_evaluar_mate_tb)*100, col = rainbow(6), ylim = c(0,30),  main = "Opciones de evaluación de mate", xlab = "Opciones", ylab = "Porcentaje Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+
+print("Funciones estadísticas")
+print("mediana")
+median(otra_evaluar_mate_tb)
+print("desviación estandar")
+sd (otra_evaluar_mate_tb)
+print("varianza")
+var (otra_evaluar_mate_tb)
+print("desviación absoluta media")
+mad (otra_evaluar_mate_tb)
+print("promedio")
+mean(otra_evaluar_mate_tb) 
+print("rango")
+range(otra_evaluar_mate_tb)
+print("summary")
+summary(otra_evaluar_mate_tb)
+```
+
+Prefiero las clases en el aula que la modalidad en línea
+```{r}
+like_aula <- factor(verano_region_mate$`Prefiero las clases en el aula que la modalidad en línea`)
+like_aula_tb <- table(like_aula)
+#View(like_aula_tb)
+
+Fre_abs_16 <- barplot(like_aula_tb, col = rainbow(6), ylim = c(0,900),  main = "Aula vs línea", xlab = "Opción", ylab = "Frecuencia Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+text(Fre_abs_1, like_aula_tb +0.1, labels = like_aula_tb)
+
+Fre_rel_16 <- barplot(prop.table(like_aula_tb)*100, col = rainbow(6), ylim = c(0,50),  main = "Aula vs línea", xlab = "Opción", ylab = "Porcentaje Alumnos")
+grid(nx=NA, ny=NULL, lwd = 1, lty = 1, col = "gray")
+
+print("Funciones estadísticas")
+print("mediana")
+median(like_aula_tb)
+print("desviación estandar")
+sd (like_aula_tb)
+print("varianza")
+var (like_aula_tb)
+print("desviación absoluta media")
+mad (like_aula_tb)
+print("promedio")
+mean(like_aula_tb) 
+print("rango")
+range(like_aula_tb)
+print("summary")
+summary(like_aula_tb)
+```
+
+
+```{r}
+library(corrplot)
+```
+
+Primeros intentos de sacar la correlación de toda la tabla fallidos
+```{r}
+#No me salio
+#region_mate <- factor(verano_region_mate)
+
+#Exceso de elementos, debo modificar para reducir respuestas y obtener la tabla deseada. 
+#tabla_trucj <- table(pro_edu,mater_mate,tec_equip,tra_clase,bene_linea,facil_aula,limi_apre_linea,falla_inter,apren_linea,estres,estres_sint,profe_mate,consul_mate,evalua_mate,like_aula) 
+#ftable(tabla_trucj) #NO se puede hacer por exceso de combinaciones
+
+```
+
+Juntamos las primeras dos variables y obtenemos la chi2 e intentamos sacar correlación y covarianza
+```{r}
+tabla_trucja <- table(pro_edu, mater_mate)
+chisq.test(tabla_trucja)
+tabla_trucja <- table(pro_edu, mater_mate)
+chisq.test(tabla_trucja)
+plot(tabla_trucja)
+
+tabla_trucja1 <- cbind(pro_edu, mater_mate)
+la <- cor(tabla_trucja1, use="complete.obs", method="kendall")
+plot(la)
+#cor.test(la) es para ver si es optimo el resultado de la correlación, pero sale error
+cosa <- cov(tabla_trucja1, use="complete.obs")
+plot(cosa)
+cor.mtest(tabla_trucja1) #para corroborar si es significativa, aunque no cacho
+```
+
+
+```{r}
+pro_edu_n <- as.numeric(pro_edu)
+pro_edu_n
+
+mater_mate_n <- as.numeric (mater_mate)
+mater_mate_n
+
+tec_equip_n <- as.numeric(tec_equip)
+
+#factores en numeros
+fac_num_orig_mate <- cbind(pro_edu_n,mater_mate_n)
+
+pro_edu
+mater_mate
+tec_equip
+tra_clase
+bene_linea
+facil_aula
+limi_apre_linea
+falla_inter
+apren_linea
+estres
+estres_sint
+profe_mate
+consul_mate
+evalua_mate
+otra_evaluar_mate
+like_aula
+
+
+table_junt <- c(pro_edu_tb,mater_mate_tb)
+View(table_junt)
+pro_edu_tb
+mater_mate_tb
+tec_equip_tb
+tra_clase_tb
+bene_linea_tb
+facil_aula_tb
+limi_apre_linea_tb
+falla_inter_tb
+apren_linea_tb
+estres_tb
+estres_sint_tb
+profe_mate_tb
+consul_mate_tb
+evalua_mate_tb
+otra_evaluar_mate_tb
+like_aula_tb
+
+
+#region_mate_tb <- table(region_mate)
+#region_mate_tb_num <- as.numeric(region_mate_tb)
+#View(like_aula_tb)
+
+corrplot.mixed(fac_num_orig_mate)
+```
